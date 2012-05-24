@@ -34,7 +34,43 @@ window.onload = function() {
                         iso.place(i,y,0, tile);
                 }
         }
+        
+        z = i*y + 100;
+        
+        var even = false
+        for (var i=0; i < 200; i++) {
+          even = !even;
+          
+          var multiple = even ? -1 : 1
+          //Ball
+          Crafty.e("2D, DOM, Color, Collision")
+          	.color('rgb(0,0,255)')
+          	.attr({ x: Math.random()*300, y: Math.random()*150, w: 10, h: 10,z:z ,
+          			dX: Crafty.math.randomInt(2, 7) * multiple, 
+          			dY: Crafty.math.randomInt(2, 7) * multiple }) 
+          	.bind('EnterFrame', function () {
+          		//hit floor or roof
+          		if (this.y <= 0 || this.y >= 290)
+          			this.dY *= -1;
 
+          		if (this.x > 600) {
+          			this.x = 300;
+          			Crafty("LeftPoints").each(function () { 
+          				this.text(++this.points + " Points") });
+          		}
+          		if (this.x < 10) {
+          			this.x = 300;
+          			Crafty("RightPoints").each(function () { 
+          				this.text(++this.points + " Points") });
+          		}
+
+          		this.x += this.dX;
+          		this.y += this.dY;
+          	})
+          	.onHit('Paddle', function () {
+          	this.dX *= -1;
+          })
+        };
         Crafty.addEvent(this, Crafty.stage.elem, "mousedown", function(e) {
                 if(e.button > 1) return;
                 var base = {x: e.clientX, y: e.clientY};
