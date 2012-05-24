@@ -38,16 +38,16 @@ window.onload = function() {
         z = i*y + 100;
         
         var even = false
-        for (var i=0; i < 200; i++) {
+        for (var i=0; i < 50; i++) {
           even = !even;
           
           var multiple = even ? -1 : 1
           //Ball
-          Crafty.e("2D, DOM, Color, Collision")
-          	.color('rgb(0,0,255)')
+          Crafty.e("ant, 2D, DOM, Image, Collision")
           	.attr({ x: Math.random()*300, y: Math.random()*150, w: 10, h: 10,z:z ,
           			dX: Crafty.math.randomInt(2, 7) * multiple, 
-          			dY: Crafty.math.randomInt(2, 7) * multiple }) 
+          			dY: Crafty.math.randomInt(2, 7) * multiple })           			
+          	.image("web/images/transant.png")          			
           	.bind('EnterFrame', function () {
           		//hit floor or roof
           		if (this.y <= 0 || this.y >= 290)
@@ -67,7 +67,10 @@ window.onload = function() {
           		this.x += this.dX;
           		this.y += this.dY;
           	})
-          	.onHit('Paddle', function () {
+          	.onHit('ant', function () {
+          	  if (Math.random() < 0.2) {
+                this.destroy()
+              }
           	this.dX *= -1;
           })
         };
